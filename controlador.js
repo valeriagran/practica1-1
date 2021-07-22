@@ -8,3 +8,5 @@
     -pagar impuesto de entrada al pais (lo digita aduanas)
     */
    
+    let button = document.getElementById("button");
+    console.log(button);
