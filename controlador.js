@@ -1,231 +1,336 @@
-//CONTROLAR LA ACTIVIDAD DEL FROMULARIO 
+//CONTROLAR LA ACTIVIDAD DEL FORMULARIO
+let nombreRevuelto;
+let precioRevuelto;
+let pesoRevuelto;
+let fotoRevuelto;
 
-let nombreConsola;
-let precioConsola;
-let pesoConsola;
-let fotoConsola;
-
-
+let moneda=true;
 
 //1. Controlar con JS el boton del formulario
 let boton=document.getElementById("boton");
 let botonLimpiar=document.getElementById("botonLimpiar");
-let cop=document.getElementById("cop");
 
-
-//2. Detectar el click en el boton
+//2. Detectar el clic en el boton
 boton.addEventListener("click",capturarDatos);
-let hrc=document.getElementById("hrc");
-
-
 botonLimpiar.addEventListener("click",limpiarCarrito);
-
-cop.addEventListener("click",conversion);
 
 //3. Crear funcion PROPIA que se llamo en el punto 2
 function capturarDatos(){
 
-    //4. Capturar los valores del formuario 
-    //Creo tantas vaiables como valores del formulario
+    //4. Capturar los valores del formulario
+    // creo tantas variables como valores del formulario
 
-    let consolaElegida=document.getElementById("productos").value;
-    seleccionarConsola(consolaElegida);
+    let revueltoElegido=document.getElementById("productos").value;
+    seleccionarRevuelto(revueltoElegido);
 
     let cantidad=document.getElementById("cantidad").value;
-
+    
     let pildora=document.getElementById("pildora");
     pildora.textContent=cantidad;
     pildora.classList.remove("invisible");
     pildora.classList.add("visible");
 
-    cop.classList.remove("invisible");
-    cop.classList.add("visible");
-   
-    let direccion=document.getElementById ("comentarios").value;
-
-    let fotoCarrito=document.getElementById("foto carrito");
-    fotoCarrito.src=fotoConsola;
+    
+    let direccion=document.getElementById("comentarios").value;
+    
+    let fotoCarrito=document.getElementById("fotoCarrito");
+    fotoCarrito.src=fotoRevuelto;
 
     let tituloCarrito=document.getElementById("tituloCarrito");
-    tituloCarrito.textContent=nombreConsola;
+    tituloCarrito.textContent=nombreRevuelto;
 
-    let precioIndividual=document.getElementById("precioUniCarrito");
-    precioIndividual.textContent=`Costo unitario: $${precioConsola} USD`;
+    let precioIndividual=document.getElementById("precioUnitarioCarrito");
+    precioIndividual.textContent=`Costo unitario: $${precioRevuelto} USD`;
 
-    let pesoIndividual=document.getElementById("pesoUniCarrito");
-    pesoIndividual.textContent=`Peso unitario: ${pesoConsola} Lb`;
+    let pesoIndividual=document.getElementById("pesoUnitarioCarrito");
+    pesoIndividual.textContent=`Peso unitario: ${pesoRevuelto} Lb`;
 
     let pesoTotal=document.getElementById("pesoTotalCarrito");
-    pesoTotal.textContent=`Peso Total de la Compra: ${pesoConsola*cantidad} Lb`;
+    pesoTotal.textContent=`Peso Total del envio: ${pesoRevuelto*cantidad}Lb`;
     
     let costoCasillero=document.getElementById("costoCasillero");
-    costoCasillero.textContent=`Costo casillero: $${calCostoCasillero(pesoConsola,cantidad)} USD`;
-
+    costoCasillero.textContent=`Costo Casillero: $${calcularCostoCasillero(pesoRevuelto,cantidad)} USD`;
+    
     let costoImpuestos=document.getElementById("costoImpuestos");
-    costoImpuestos.textContent=`Costo venta (impuestos):$${calcularCostoImpuestos(precioConsola, cantidad)}`;
+    costoImpuestos.textContent=`Costo venta(impuestos):$${calcularCostoImpuestos(precioRevuelto,cantidad)}`;
 
     let costoTotal=document.getElementById("costoTotal");
-    costoTotal.textContent=`Costo Total: $${(calCostoCasillero(pesoConsola,cantidad))+(calcularCostoImpuestos(precioConsola,cantidad))} USD`;
+    costoTotal.textContent=`Costo Total: $${(calcularCostoCasillero(pesoRevuelto,cantidad))+(calcularCostoImpuestos(precioRevuelto,cantidad))} USD`;
 
-    let hrc1=document.getElementById("hrc1");
-    let hrc=document.getElementById("hrc");
-    hrc.classList.remove("invisible");
-    hrc1.classList.remove("invisible");
+
+    let botonCOP=document.getElementById("botonCOP");
+    botonCOP.classList.remove("invisible");
+    botonCOP.classList.add("visible");
+
+    botonCOP.addEventListener("click",CambiarMoneda);
+
+
 }
 
+//5. Seleccionar la información del Revuelto segun la selección del usuario
+function seleccionarRevuelto(opcion){
 
-//5. Seleccionar la informacion de la consola segun la seleccion del usuario
-function seleccionarConsola(opcion){
-
-    let consolas={
-        nombres:Array("XBOX Series X","Nintendo Switch","PS5","PC"),
-        precios:Array(750,700,409,5250),
-        pesos:Array(14.2,13.1,4.75,5.51),
-        fotos:Array("img/carrucel1.jpg","img/carucel2.jpg","img/carrucel3.jpg","img/pc.jpg")
+    let revuelto={
+        nombres:Array("Papa", "Fresas", "Zanahoria", "Arracacha", "Borojo ", "Tomate", "Yuca", "Chontaduro", "Ñame","Mamoncillos", "Ochuvas", "Durian", "Carambolo", "Coliflor", "Remolacha"),
+        precios:Array(5,10,5,11,12,7,6,14,13,15,9,10,12,7,6),
+        pesos:Array(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
+        fotos:Array("https://github.com/jjosegallegocesde/imagenes-amazon/blob/main/img/ps5.jpg?raw=true",
+        "https://github.com/jjosegallegocesde/imagenes-amazon/blob/main/img/xbox.jpg?raw=true",
+        "https://github.com/jjosegallegocesde/imagenes-amazon/blob/main/img/nintendo.jpg?raw=true"),
         
     }
 
     if(opcion==1){
 
-        nombreConsola=consolas.nombres[0];
-        precioConsola=consolas.precios[0];
-        pesoConsola=consolas.pesos[0];
-        fotoConsola=consolas.fotos[0];
+        nombreRevuelto=revuelto.nombres[0];
+        precioRevuelto=revuelto.precios[0];
+        pesoRevuelto=revuelto.pesos[0];
+        fotoRevuelto=revuelto.fotos[0];
+
+    }else if(opcion==2){
+        
+        nombreRevuelto=revuelto.nombres[1];
+        precioRevuelto=revuelto.precios[1];
+        pesoRevuelto=revuelto.pesos[1];
+        fotoRevuelto=revuelto.fotos[1];
+
+    }else if(opcion==3){
+        
+        nombreRevuelto=revuelto.nombres[2];
+        precioRevuelto=revuelto.precios[2];
+        pesoRevuelto=revuelto.pesos[2];
+        fotoRevuelto=revuelto.fotos[2];
+
+    }else if(opcion==4){
+        
+        nombreRevuelto=revuelto.nombres[3];
+        precioRevuelto=revuelto.precios[3];
+        pesoRevuelto=revuelto.pesos[3];
+        fotoRevuelto=revuelto.fotos[3];
+
+    }else if(opcion==5){
+        
+        nombreRevuelto=revuelto.nombres[4];
+        precioRevuelto=revuelto.precios[4];
+        pesoRevuelto=revuelto.pesos[4];
+        fotoRevuelto=revuelto.fotos[4];
+
+    }else if(opcion==6){
+        
+        nombreRevuelto=revuelto.nombres[5];
+        precioRevuelto=revuelto.precios[5];
+        pesoRevuelto=revuelto.pesos[5];
+        fotoRevuelto=revuelto.fotos[5];
+
+    }else if(opcion==7){
+        
+        nombreRevuelto=revuelto.nombres[6];
+        precioRevuelto=revuelto.precios[6];
+        pesoRevuelto=revuelto.pesos[6];
+        fotoRevuelto=revuelto.fotos[6];
+
+    }else if(opcion==8){
+        
+        nombreRevuelto=revuelto.nombres[7];
+        precioRevuelto=revuelto.precios[7];
+        pesoRevuelto=revuelto.pesos[7];
+        fotoRevuelto=revuelto.fotos[7];
+
+    }else if(opcion==9){
+        
+        nombreRevuelto=revuelto.nombres[8];
+        precioRevuelto=revuelto.precios[8];
+        pesoRevuelto=revuelto.pesos[8];
+        fotoRevuelto=revuelto.fotos[8];
+
+    }else if(opcion==10){
+        
+        nombreRevuelto=revuelto.nombres[9];
+        precioRevuelto=revuelto.precios[9];
+        pesoRevuelto=revuelto.pesos[9];
+        fotoRevuelto=revuelto.fotos[9];
+
+    }else if(opcion==11){
+        
+        nombreRevuelto=revuelto.nombres[10];
+        precioRevuelto=revuelto.precios[10];
+        pesoRevuelto=revuelto.pesos[10];
+        fotoRevuelto=revuelto.fotos[10];
+
+    }else if(opcion==12){
+        
+        nombreRevuelto=revuelto.nombres[11];
+        precioRevuelto=revuelto.precios[11];
+        pesoRevuelto=revuelto.pesos[11];
+        fotoRevuelto=revuelto.fotos[11];
+
+    }else if(opcion==13){
+        
+        nombreRevuelto=revuelto.nombres[12];
+        precioRevuelto=revuelto.precios[12];
+        pesoRevuelto=revuelto.pesos[12];
+        fotoRevuelto=revuelto.fotos[12];
+
+    }else if(opcion==14){
+        
+        nombreRevuelto=revuelto.nombres[13];
+        precioRevuelto=revuelto.precios[13];
+        pesoRevuelto=revuelto.pesos[13];
+        fotoRevuelto=revuelto.fotos[13];
+
+    }else if(opcion==15){
+        
+        nombreRevuelto=revuelto.nombres[14];
+        precioRevuelto=revuelto.precios[14];
+        pesoRevuelto=revuelto.pesos[14];
+        fotoRevuelto=revuelto.fotos[14];
+
+    }else{
+        nombreRevuelto=null;
+        precioRevuelto=null;
+        pesoRevuelto=null;
+        fotoRevuelto=null;
 
     }
-    else if(opcion==2){
 
-        nombreConsola=consolas.nombres[1];
-        precioConsola=consolas.precios[1];
-        pesoConsola=consolas.pesos[1];
-        fotoConsola=consolas.fotos[1];
 
-    }
-    else if(opcion==3){
-
-        nombreConsola=consolas.nombres[2];
-        precioConsola=consolas.precios[2];
-        pesoConsola=consolas.pesos[2];
-        fotoConsola=consolas.fotos[2];
-
-    }
-    else if(opcion==4){
-
-        nombreConsola=consolas.nombres[3];
-        precioConsola=consolas.precios[3];
-        pesoConsola=consolas.pesos[3];
-        fotoConsola=consolas.fotos[3];
-
-    }
-    else{
-
-        nombreConsola=null;
-        precioConsola=null;
-        pesoConsola=null;
-        fotoConsola=null;
-
-    }
 }
 
-//6. Calcular el costo del casillero 
-function calCostoCasillero(pesoConsola, cantidad){
+function calcularCostoCasillero(pesoRevuelto,cantidad){
 
     let costoCasillero=0;
+    let pesoTotalEnvio=pesoRevuelto*cantidad;
 
-    let pesoTotalEnvio=pesoConsola*cantidad;
+    if(pesoTotalEnvio<=15){
 
-    if(pesoTotalEnvio<=20){
+        costoCasillero=20;
 
-        costoCasillero=85;
+    }else{ 
 
-    }
-    else{
-
-        let pesoExtra=pesoTotalEnvio-20;
-
-        costoCasillero=85+(pesoExtra*2);
+        let pesoExtra=pesoTotalEnvio-15;
+        costoCasillero=20+(pesoExtra*2);
 
     }
-
+    
     return costoCasillero;
-
 }
 
-function calcularCostoImpuestos(costoConsola,cantidad){
-    const IMPUESTO_PAIS=114;
+function calcularCostoImpuestos(precioRevuelto,cantidad){
+
+    const IMPUESTO_PAIS=25;
     const VALOR_SEGURO=7;
 
-    let costoCompra=costoConsola*cantidad;
+    let costoCompra=precioRevuelto*cantidad;
     let costoTotal=costoCompra+IMPUESTO_PAIS+VALOR_SEGURO;
 
     return costoTotal;
+
 } 
+
 
 function limpiarCarrito(){
 
-    console.log("hiciste clic en limpiar");
-
-    let fotoCarrito=document.getElementById("foto carrito");
-    fotoCarrito.src="img/amazon.svg";
+    let fotoCarrito=document.getElementById("fotoCarrito");
+    fotoCarrito.src="https://github.com/jjosegallegocesde/imagenes-amazon/blob/main/img/fotoCarrito.PNG?raw=true";
 
     let tituloCarrito=document.getElementById("tituloCarrito");
-    tituloCarrito.textContent="Tu carro de Amazon esta vacio   ";
+    tituloCarrito.textContent="Tu Carrito de Amazon está vacío";
 
-    let precioIndividual=document.getElementById("precioUniCarrito");
-    precioIndividual.textContent=null;
+    let precioIndividual=document.getElementById("precioUnitarioCarrito");
+    precioIndividual.textContent="";
 
-    let pesoIndividual=document.getElementById("pesoUniCarrito");
-    pesoIndividual.textContent=null;
+    let pesoIndividual=document.getElementById("pesoUnitarioCarrito");
+    pesoIndividual.textContent="";
 
     let pesoTotal=document.getElementById("pesoTotalCarrito");
-    pesoTotal.textContent=null;
+    pesoTotal.textContent=""
     
     let costoCasillero=document.getElementById("costoCasillero");
-    costoCasillero.textContent=null;
-
+    costoCasillero.textContent="";
+    
     let costoImpuestos=document.getElementById("costoImpuestos");
-    costoImpuestos.textContent=null;
+    costoImpuestos.textContent="";
 
     let costoTotal=document.getElementById("costoTotal");
-    costoTotal.textContent=null;
-    
-    let hrc1=document.getElementById("hrc1");
-    hrc1.classList.add("invisible");
+    costoTotal.textContent="";
 
-    let hrc=document.getElementById("hrc");
-    hrc.classList.add("invisible");
-    
-    pildora.classList.add("invisible");
+    let pildora=document.getElementById("pildora");
+    pildora.textContent="";
     pildora.classList.remove("visible");
+    pildora.classList.add("invisible");
 
-    cop.classList.add("invisible");
-    cop.classList.remove("visible");
+    let botonCOP=document.getElementById("botonCOP");
+    botonCOP.classList.remove("visible");
+    botonCOP.classList.add("invisible");
 
 
 }
 
-function COP(dolares){
-    const TRM=3959;
+function CambiarMoneda(){
+    if(moneda){
 
-    let pcop = dolares*TRM;
+        convertirFacturaCOP()
 
-    return pcop;
+    }else{
+
+        convertirFacturaDolares()
+
+    }
 }
 
-function conversion(){
+function convertirFacturaCOP(){
+
+    moneda=false;
+    let botonCOP=document.getElementById("botonCOP");
+    botonCOP.textContent="USD ($)"
 
     let cantidad=document.getElementById("cantidad").value;
 
-    let precioIndividual=document.getElementById("precioUniCarrito");
-    precioIndividual.textContent=`Costo unitario: $${COP(precioConsola)} COP`;
+    let precioIndividual=document.getElementById("precioUnitarioCarrito");
+    precioIndividual.textContent=`Costo unitario: $${convertiraPesos(precioRevuelto)} COP`;
 
     let costoCasillero=document.getElementById("costoCasillero");
-    costoCasillero.textContent=`Costo casillero: $${COP(calCostoCasillero(pesoConsola,cantidad))} COP`;
-
-    let costoTotal=document.getElementById("costoTotal");
-    costoTotal.textContent=`Costo Total: $${COP(calCostoCasillero(pesoConsola,cantidad))+(calcularCostoImpuestos(precioConsola,cantidad))} COP`;
+    costoCasillero.textContent=`Costo Casillero: $${convertiraPesos(calcularCostoCasillero(pesoRevuelto,cantidad))} COP`;
 
     let costoImpuestos=document.getElementById("costoImpuestos");
-    costoImpuestos.textContent=`Costo venta (impuestos):$${COP(calcularCostoImpuestos(precioConsola, cantidad))}`;
+    costoImpuestos.textContent=`Costo venta(impuestos):$${convertiraPesos(calcularCostoImpuestos(precioRevuelto,cantidad))} COP`;
+
+    let costoTotal=document.getElementById("costoTotal");
+    costoTotal.textContent=`Costo Total: $${convertiraPesos((calcularCostoCasillero(pesoRevuelto,cantidad))+(calcularCostoImpuestos(precioRevuelto,cantidad)))} COP`;
+
+}
+
+function convertirFacturaDolares(){
+
+    moneda=true;
+
+    let botonCOP=document.getElementById("botonCOP");
+    botonCOP.textContent="COP ($)"
+
+    let cantidad=document.getElementById("cantidad").value;
+
+    let precioIndividual=document.getElementById("precioUnitarioCarrito");
+    precioIndividual.textContent=`Costo unitario: $${precioRevuelto} USD`;
+
+    let costoCasillero=document.getElementById("costoCasillero");
+    costoCasillero.textContent=`Costo Casillero: $${calcularCostoCasillero(pesoRevuelto,cantidad)} USD`;
+
+    let costoImpuestos=document.getElementById("costoImpuestos");
+    costoImpuestos.textContent=`Costo venta(impuestos):$${calcularCostoImpuestos(precioRevuelto,cantidad)} USD`;
+
+    let costoTotal=document.getElementById("costoTotal");
+    costoTotal.textContent=`Costo Total: $${(calcularCostoCasillero(pesoRevuelto,cantidad))+(calcularCostoImpuestos(precioRevuelto,cantidad))} USD`;
+
+}
+
+
+function convertiraPesos(precioDolares){
+    
+    const TRM=3932; //3932 pesos equivalen a 1 dolar
+    let precioPesos= precioDolares*TRM;
+
+    return precioPesos;
+
+
 
 }
